@@ -11,35 +11,59 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
 
 
-  function getRandomQuote(max){
-    return Math.floor(Math.random()*max)
+
+  function getRandomQuote(max) {
+    return Math.floor(Math.random() * max)
   }
 
-const setSelect = () => {
-  return setSelected(getRandomQuote(8))
-}
+  const setSelect = () => {
+    return setSelected(getRandomQuote(8))
+  }
 
-const randomQuote = () => {
-  return anecdotes[selected]
-}
+  const randomQuote = () => {
+    return anecdotes[selected]
+  }
+
+//  const votes = [0, 0, 0, 0, 0, 0, 0, 0]
+//  const copy = {...votes}
+
+//  const addVote = () => {
+//   console.log(copy)
+//   copy[selected] +=1
+//   console.log(copy)
+
+//  }
+
+  const addVote = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
+  }
+
+  const displayLead = () => {
+    const highest = votes.sort((a,b)=> b-a);
+    return highest[0]
+  }
+
+  const Button = ({ onclick, text }) => <button onClick={onclick}>{text}</button>
+
+  const Display = ({ text }) => <div>{text}</div>
 
 
 
-  
-  const Button = ({onclick, text}) => <button onClick={onclick}>{text}</button>
 
-  const Display = ({selected}) => <div>{selected}</div>
-
-  
 
   return (
     <div>
-      <Display selected={randomQuote()}/>
-      <Button onclick={setSelect} text="Get a random quote"/>
+      <Display text={randomQuote()} />
+      <Button onclick={setSelect} text="Get a random quote" />
+      <Button onclick={addVote} text="Vote" />
+      <Display text={displayLead()} />
     </div>
   )
 }
