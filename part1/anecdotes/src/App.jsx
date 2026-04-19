@@ -15,6 +15,23 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0, 0, 0])
 
+  // display highest amount of votes
+  // you can sort the arr by highest and return the first value
+  // but that only returns the number
+  // say the highest votes is 3 for the third quote
+  // it's at position votes[2] and that is equal to anecdotes[2]
+
+  function getHighestVoted() {
+    let maxValue = Math.max(...votes);
+    if (maxValue == 0) {
+      return ""
+    }
+    else {
+      let maxIndex = votes.indexOf(maxValue);
+      return anecdotes[maxIndex]
+    }
+  }
+
 
 
   function getRandomQuote(max) {
@@ -29,25 +46,11 @@ const App = () => {
     return anecdotes[selected]
   }
 
-//  const votes = [0, 0, 0, 0, 0, 0, 0, 0]
-//  const copy = {...votes}
-
-//  const addVote = () => {
-//   console.log(copy)
-//   copy[selected] +=1
-//   console.log(copy)
-
-//  }
 
   const addVote = () => {
     const copy = [...votes]
     copy[selected] += 1
     setVotes(copy)
-  }
-
-  const displayLead = () => {
-    const highest = votes.sort((a,b)=> b-a);
-    return highest[0]
   }
 
   const Button = ({ onclick, text }) => <button onClick={onclick}>{text}</button>
@@ -63,7 +66,8 @@ const App = () => {
       <Display text={randomQuote()} />
       <Button onclick={setSelect} text="Get a random quote" />
       <Button onclick={addVote} text="Vote" />
-      <Display text={displayLead()} />
+      <Display text="Most popular:" />
+      <Display text={getHighestVoted()} />
     </div>
   )
 }
