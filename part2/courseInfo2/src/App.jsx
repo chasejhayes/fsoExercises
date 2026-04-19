@@ -27,6 +27,15 @@ const App = () => {
     ]
   }
 
+  const textArr = [1, 2, 3, 4,5
+  ]
+
+  // const getTotalExercises = () =>{
+  //   let x = course.parts.exercises.reduce((total, adder)=> total+adder,0)
+  //   console.log(x)
+  // }
+  // getTotalExercises()
+
   const Course = ({ course }) => {
     return (
       <div>
@@ -38,9 +47,15 @@ const App = () => {
             </li>
           )}
         </ul>
+        <p>{
+            course.parts.map(part=>part.exercises).reduce((total, adder)=> total+adder,0)
+
+
+          }</p>
       </div>
     )
   }
+
 
 
 
