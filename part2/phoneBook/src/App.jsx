@@ -7,6 +7,7 @@ const App = () => {
 
 const [newName, setNewName] = useState("")
 const [newNumber, setNewNumber] = useState("")
+const [filter, setFilter] = useState("")
 
 
 const addName = (event) => {
