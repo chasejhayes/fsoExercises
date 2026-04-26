@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import people from './services/people'
+
+import axios from "axios"
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -9,22 +10,13 @@ const App = () => {
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
 
-  // const hook = () => {
-  //   people
-  //     .getAll()
-  //     .then(response => {
-  //       setPersons(response.data)
-  //     })
-  // }
-
-  // useEffect(hook, [])
 
   useEffect(() => {
     people
-    .getAll()
-    .then(response => {
-      setPersons(response.data)
-    })
+      .getAll()
+      .then(response => {
+        setPersons(response.data)
+      })
   }, [])
 
 
@@ -34,9 +26,6 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-
-
-
     if (persons.some(person => person.name === nameObject.name)) {
       return alert(`${newName} is already in the phone book.`)
     } else {
@@ -52,45 +41,62 @@ const App = () => {
     }
   }
 
-    const handleNameChange = (event) => {
-      setNewName(event.target.value)
-    }
-    const handleNumberChange = (event) => {
-      setNewNumber(event.target.value)
-    }
+  const deleteNote = ( id) => {
+    // e.preventDefault()
+    const url = "http://localhost:3002/persons"
+    let id1 = `${url}/${id}`
+    axios.delete(id1)
+  }
 
-    function Form({ value, text }) {
-      <div>{text} {value}</div>
 
-    }
-
+  const DeleteButton = ({ text, deleteFromServer}) => {
     return (
-      <div>
-        <h2>Phonebook</h2>
-        <form onSubmit={addName}>
-          <Form text="Name1: " value={newNumber} />
-          <div>
-            name: <input value={newName} onChange={handleNameChange} />
-          </div>
-          <div>
-            number: <input value={newNumber} onChange={handleNumberChange} />
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
-        <h2>Numbers</h2>
-        <div>
-          {persons.map(person =>
-            <div key={person.name}>
-              {person.name} {person.number}
-            </div>
-          )}
-        </div>
-        <div>debug: {newName}</div>
-      </div>
-
+      <button onClick={deleteFromServer}>{text}</button>
     )
   }
 
-  export default App
+
+  const handleNameChange = (event) => {
+    setNewName(event.target.value)
+  }
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
+  function Form({ value, text }) {
+    <div>{text} {value}</div>
+
+  }
+
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addName}>
+        <Form text="Name1: " value={newNumber} />
+        <div>
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      <div>
+        {persons.map(person =>
+          <div key={person.name}>
+            {person.name} {person.number}
+            <DeleteButton text="Delete" deleteFromServer={() => deleteNote(person.id)} />
+          </div>
+
+        )}
+      </div>
+      <div>debug: {newName}</div>
+    </div>
+
+  )
+}
+
+export default App
