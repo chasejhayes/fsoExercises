@@ -9,6 +9,7 @@ const App = () => {
 
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
+  const [completeMessage, setCompleteMessage] = useState("")
 
 
   useEffect(() => {
@@ -18,6 +19,17 @@ const App = () => {
         setPersons(response.data)
       })
   }, [])
+
+  const Alert = ({message}) => {
+    if (message === null){
+      return null
+    }
+    return (
+      <div className="message">
+      {message}
+      </div>
+    )
+  }
 
 
   const addName = (event) => {
@@ -37,6 +49,11 @@ const App = () => {
           setNewName("")
           setNewNumber(newNumber.concat(response.data))
           setNewNumber("")
+
+          setCompleteMessage("Added")
+          setTimeout(()=> {
+            setCompleteMessage(null)
+          }, 5000)
         })
     }
   }
@@ -71,6 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Alert message={completeMessage}/>
       <form onSubmit={addName}>
         <Form text="Name1: " value={newNumber} />
         <div>
