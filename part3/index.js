@@ -47,13 +47,18 @@ app.get("/info", (request, response)=> {
 app.get("/api/people/:id", (request, response)=> {
     const id = request.params.id
     const person = people.find(person => person.id === id)
-    
-   
     if(person){
           response.json(person)
     } else {
         response.status(404).end()
     }
+})
+
+app.delete("/api/people/:id", (request, response)=> {
+    const id = request.params.id
+    people = people.filter(person => person.id !== id)
+
+    response.status(204).end()
 })
 
 
