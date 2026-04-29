@@ -66,16 +66,44 @@ app.delete("/api/people/:id", (request, response) => {
 function getID(min, max){
     return Math.random() * (max - min) + min
 }
+function generateID(){
+    return String(Math.floor(getID(1, 1000)))
+}
 
 app.post("/api/people", (request, response) => {
-    const maxId = people.length > 0
-        ? Math.max(...people.map(n => Number(n.id)))
-        : 0
-
-    const person = request.body
+    const body = request.body
 
 
-    person.id = String(Math.floor(getID(1, 1000)))
+    if (!body.number && !body.name){
+        return response.status(400).json({
+            error: "Missing name and number"
+        })
+    }
+    else if (!body.name){
+        return response.status(400).json({
+            error: "Missing name"
+        })
+        
+    }
+    else if (!body.number){
+        return response.status(400).json({
+            error: "Missing number"
+        })
+    }
+    else if (people.find(person => person.name ===body.name)){
+         return response.status(400).json({
+            error: "Already in phone book"
+        })
+    }
+    // const person = people.find(person => person.id === id)
+    
+    
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateID()
+
+    }
 
     people = people.concat(person)
 
