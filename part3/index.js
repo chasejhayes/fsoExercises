@@ -1,26 +1,28 @@
 const express = require("express")
 const app = express()
 
+app.use(express.json())
+
 let people = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
+    {
+        "id": "1",
+        "name": "Arto Hellas",
+        "number": "040-123456"
     },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
+    {
+        "id": "2",
+        "name": "Ada Lovelace",
+        "number": "39-44-5323523"
     },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
+    {
+        "id": "3",
+        "name": "Dan Abramov",
+        "number": "12-43-234345"
     },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
+    {
+        "id": "4",
+        "name": "Mary Poppendieck",
+        "number": "39-23-6423122"
     }
 ]
 
@@ -37,32 +39,53 @@ const date = Date().toLocaleString()
 
 
 
-app.get("/info", (request, response)=> {
+app.get("/info", (request, response) => {
     response.send(`<p>The Phonebook has ${number} people.</p>
     <p>${date}</p>`
     )
-  
+
 })
 
-app.get("/api/people/:id", (request, response)=> {
+app.get("/api/people/:id", (request, response) => {
     const id = request.params.id
     const person = people.find(person => person.id === id)
-    if(person){
-          response.json(person)
+    if (person) {
+        response.json(person)
     } else {
         response.status(404).end()
     }
 })
 
-app.delete("/api/people/:id", (request, response)=> {
+app.delete("/api/people/:id", (request, response) => {
     const id = request.params.id
     people = people.filter(person => person.id !== id)
 
     response.status(204).end()
 })
 
+function getID(min, max){
+    return Math.random() * (max - min) + min
+}
+
+app.post("/api/people", (request, response) => {
+    const maxId = people.length > 0
+        ? Math.max(...people.map(n => Number(n.id)))
+        : 0
+
+    const person = request.body
+
+
+    person.id = String(Math.floor(getID(1, 1000)))
+
+    people = people.concat(person)
+
+
+    console.log(person)
+    response.json(person)
+})
+
 
 const PORT = 3001
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log("Server running")
 })
